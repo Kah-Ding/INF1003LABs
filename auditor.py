@@ -13,7 +13,7 @@ while True:
         print("Inventory has been updated.")
     else:
         if stocks == 'q' or stocks =="quit":
-            print("Total Units Processed: ", inventory,"Number of failed/invalid entries: ", stocks)
+            print("Total Units Processed: ", inventory,"Number of failed/invalid entries: ", failed)
             break
         print("Invalid input. Please enter a numeric value.")
         failed += 1
