@@ -1,0 +1,71 @@
+commit 86b399921af33fc4bac01b609c7c2db4c6ece7b8
+Author: kah-ding <2604752@sit.singaporetech.edu.sg>
+Date:   Fri Sep 25 10:01:30 2026 +0800
+
+    Create: gitignore
+
+commit 7aa188d2bb7c1837a8659f4ed9f2577fd73484f8
+Author: kah-ding <2604752@sit.singaporetech.edu.sg>
+Date:   Fri Sep 25 10:00:20 2026 +0800
+
+    Lab4: Persistency
+
+commit 3ab68b400c27aa3b5532282a027e321f9b8bd85a
+Author: Kah Ding <pungkahding@gmail.com>
+Date:   Fri Sep 18 16:41:11 2026 +0800
+
+    Update: logs
+
+commit 27335674878fa85eee0e67d496e17920e55b894c
+Author: Kah Ding <pungkahding@gmail.com>
+Date:   Fri Sep 18 16:36:53 2026 +0800
+
+    Fixed: Docker
+
+commit 409b71664711950ee47d2b978f6175596a82943d
+Author: Kah Ding <pungkahding@gmail.com>
+Date:   Fri Sep 18 16:36:28 2026 +0800
+
+    modular-ed auditor
+
+commit 4f9e4d74c0713f03ad6ca19d2a04e6144ebf2a9f
+Author: Kah Ding <pungkahding@gmail.com>
+Date:   Fri Sep 18 16:33:25 2026 +0800
+
+    Add: Dockerfile and the relevance
+
+commit b181af7cb485f9da0d8b35faf29d2cc48d24fade
+Author: punkKD <pungkahding@gmail.com>
+Date:   Thu Sep 10 22:42:59 2026 +0800
+
+    Update: Quit Print Message.
+
+commit c04cf8c0cd1f115bd6a19c9e1f88ebc0ac8d005f
+Author: punkKD <pungkahding@gmail.com>
+Date:   Thu Sep 10 22:42:06 2026 +0800
+
+    Update: Quit Print failed message.
+
+commit 6a7d4616117b1374a559ef966a21750491f238ae
+Author: punkKD <pungkahding@gmail.com>
+Date:   Thu Sep 10 22:41:27 2026 +0800
+
+    Update: 500 Limit & Quit Print.
+
+commit 079bfc7d11d03426689dffd2bd671dd523ebbc27
+Author: punkKD <pungkahding@gmail.com>
+Date:   Thu Sep 10 22:36:56 2026 +0800
+
+    Remove:choice. Update:Stocks Input.
+
+commit 84abd3a866fe3f33cd438ce1c8caa5d0f3105825
+Author: punkKD <pungkahding@gmail.com>
+Date:   Thu Sep 10 22:31:00 2026 +0800
+
+    Update:While Loop Condition. Create: choice option
+
+commit b56891fd4a25267086730bd1e6f9c69cf24f5244
+Author: punkKD <pungkahding@gmail.com>
+Date:   Thu Sep 10 22:10:57 2026 +0800
+
+    First Part
