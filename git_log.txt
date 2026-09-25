@@ -1,3 +1,15 @@
+commit 1ab8ecbc948ffd8a57ba7bb7cc42f0f83433fe5d
+Author: kah-ding <2604752@sit.singaporetech.edu.sg>
+Date:   Fri Sep 25 10:02:21 2026 +0800
+
+    Create: persistent auditor 2 (uncertain which one fits the lab)
+
+commit 61454c0885ebafb1d9c8a23cec8a920f7c280b7d
+Author: kah-ding <2604752@sit.singaporetech.edu.sg>
+Date:   Fri Sep 25 10:01:48 2026 +0800
+
+    Create: log.txt
+
 commit 86b399921af33fc4bac01b609c7c2db4c6ece7b8
 Author: kah-ding <2604752@sit.singaporetech.edu.sg>
 Date:   Fri Sep 25 10:01:30 2026 +0800

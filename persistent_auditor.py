@@ -1,9 +1,12 @@
+INVENTORY_FILE = "/app/lab_inventory/orders.txt"
+
+
 def load_inventory():
     inventory = []
     orders=["1001, Wireless Mouse, 2\n",
     "1002, Keyboard, 1\n",
     "1003, USB Cable, 3\n"]    
-    with open("orders.txt", "a+") as file:
+    with open(INVENTORY_FILE, "a+") as file:
         if file.tell() == 0:
             file.writelines(orders)
         file.seek(0)
@@ -18,9 +21,9 @@ def load_inventory():
     return inventory,order_id
 
 def save_inventory(order):
-    with open("orders.txt", "a") as file:
+    with open(INVENTORY_FILE, "a") as file:
         file.write(str(order))
-    print("Order successfully saved to orders.txt")
+    print(f"Order successfully saved to {INVENTORY_FILE}")
 
 def get_valid_input():
     failed=0
@@ -53,7 +56,7 @@ def get_valid_input():
         else:
             if product_name == 'q' or product_name =="quit":
                 print("\nNew Order Added:\n")
-                print(f"{order_id}, {product_name}, {stocks}\n")
+                print(new_order.rstrip()+"\n")
                 save_inventory(new_order)
                 generate_report(new_order,failed)
                 break

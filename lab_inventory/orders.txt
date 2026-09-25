@@ -1,0 +1,7 @@
+1001, Wireless Mouse, 2
+1002, Keyboard, 1
+1003, USB Cable, 3
+1004, keypad, 4
+1005, hdmi cable, 4
+1006, type c cable, 3
+1007, phones, 5
