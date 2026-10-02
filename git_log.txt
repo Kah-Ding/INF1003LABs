@@ -1,3 +1,21 @@
+commit acfcf5c343057457e9213c0af1fada04791879ef
+Author: Kah Ding <pungkahding@gmail.com>
+Date:   Fri Oct 2 17:28:47 2026 +0800
+
+    Update: screenshots
+
+commit 2c9fc6c8ad43a59b230b3977892bc270c6dd9a46
+Author: kah-ding <2604752@sit.singaporetech.edu.sg>
+Date:   Fri Oct 2 11:42:37 2026 +0800
+
+    Update: Lab5 | Remove: persistent_auditor 2 | Add: inventory.json
+
+commit ad773fff6b24ed3f90eadd827c293d57bfda5731
+Author: Kah Ding <pungkahding@gmail.com>
+Date:   Fri Sep 25 16:59:27 2026 +0800
+
+    Update: volumes & Fixed: display bug
+
 commit 1ab8ecbc948ffd8a57ba7bb7cc42f0f83433fe5d
 Author: kah-ding <2604752@sit.singaporetech.edu.sg>
 Date:   Fri Sep 25 10:02:21 2026 +0800
