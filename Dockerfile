@@ -1,5 +1,7 @@
 FROM python:3.9-slim
+
 WORKDIR /app
-COPY inventory_manager.py .
-VOLUME ["/app/lab_inventory"]
-CMD ["python", "inventory_manager.py"]
+
+COPY main.py product.py inventory.py file_handler.py ./
+
+CMD ["python", "-u", "main.py"]
