@@ -1,5 +1,6 @@
 classDiagram
     class Product {
+        <<abstract>>
         -__product_id : str
         -__name : str
         -__price : float
@@ -12,6 +13,26 @@ classDiagram
         +update_stock(quantity : int) void
         +calculate_tax(quantity : int, rate : float) float
         +display_information() void
+        +get_fulfilment_info()* str
+    }
+    class CanBeShipped {
+        <<interface>>
+        +calculate_shipping_cost()* float
+    }
+    class PhysicalProduct {
+        -__weight : float
+        +BASE_SHIPPING_FEE : float = 5.00
+        +RATE_PER_KG : float = 2.00
+        +weight() float
+        +display_information() void
+        +get_fulfilment_info() str
+        +calculate_shipping_cost() float
+    }
+    class DigitalProduct {
+        -__download_size : float
+        +download_size() float
+        +display_information() void
+        +get_fulfilment_info() str
     }
     class Inventory {
         -__products : list~Product~
@@ -27,8 +48,14 @@ classDiagram
         -__file_path : str
         +load() Inventory
         +save(inventory : Inventory) void
+        -__create_product(record : dict) Product
+        -__to_record(product : Product) dict
         -__write(records : list) void
     }
+    Product <|-- PhysicalProduct
+    Product <|-- DigitalProduct
+    CanBeShipped <|.. PhysicalProduct
     Inventory "1" o-- "0..*" Product : contains
     InventoryFileHandler ..> Inventory : loads/saves
-    InventoryFileHandler ..> Product : creates
+    InventoryFileHandler ..> PhysicalProduct : creates
+    InventoryFileHandler ..> DigitalProduct : creates

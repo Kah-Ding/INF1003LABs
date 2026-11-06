@@ -1,6 +1,7 @@
 """
 inventory.py
-SRP: An Inventory is responsible for managing a COLLECTION of Product objects.
+SRP: manages a COLLECTION of Product objects.
+Unchanged in logic from Lab 6 - it works with any Product subclass (OCP in action).
 """
 
 from product import Product
@@ -8,7 +9,7 @@ from product import Product
 
 class Inventory:
     def __init__(self):
-        self.__products = []  # list of Product objects
+        self.__products = []
 
     def add_product(self, product: Product) -> None:
         if not isinstance(product, Product):
@@ -18,7 +19,6 @@ class Inventory:
         self.__products.append(product)
 
     def find_by_id(self, product_id: str):
-        """Return the Product with an exact ID match, or None."""
         product_id = product_id.strip().upper()
         for product in self.__products:
             if product.product_id == product_id:
@@ -26,7 +26,6 @@ class Inventory:
         return None
 
     def search_product(self, keyword: str) -> list:
-        """Return all products whose ID or name contains the keyword (case-insensitive)."""
         keyword = keyword.strip().lower()
         return [
             p for p in self.__products
@@ -40,14 +39,12 @@ class Inventory:
         print(f"{'ID':<8}{'Name':<20}{'Price':>10}{'Stock':>8}")
         print("-" * 46)
         for product in self.__products:
-            product.display_information()
+            product.display_information()   # each subclass displays itself
 
     def get_products(self) -> list:
-        """Return a copy so outside code can't modify the internal list directly."""
         return list(self.__products)
 
     def generate_next_id(self) -> str:
-        """Next ID after the highest existing one (like order_id + 1 in persistent_auditor.py)."""
         highest = 0
         for product in self.__products:
             digits = "".join(ch for ch in product.product_id if ch.isdigit())

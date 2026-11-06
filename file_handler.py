@@ -1,18 +1,20 @@
 """
 file_handler.py
-SRP: Responsible ONLY for loading and saving inventory data to JSON.
+SRP: loads and saves inventory data to JSON.
+Each record stores a "type" identifier so the correct subclass is rebuilt on load.
 """
 
 import json
 import os
 
-from product import Product
 from inventory import Inventory
+from physical_product import PhysicalProduct
+from digital_product import DigitalProduct
 
 DEFAULT_PRODUCTS = [
-    {"product_id": "P001", "name": "Wireless Mouse", "price": 25.50, "stock": 2},
-    {"product_id": "P002", "name": "Keyboard", "price": 45.00, "stock": 1},
-    {"product_id": "P003", "name": "USB Cable", "price": 9.90, "stock": 3},
+    {"type": "physical", "product_id": "P001", "name": "Wireless Mouse", "price": 25.50, "stock": 2, "weight": 0.1},
+    {"type": "physical", "product_id": "P002", "name": "Keyboard", "price": 45.00, "stock": 1, "weight": 0.8},
+    {"type": "digital", "product_id": "P003", "name": "Antivirus Licence", "price": 39.90, "stock": 50, "download_size": 350},
 ]
 
 
@@ -25,7 +27,6 @@ class InventoryFileHandler:
         return self.__file_path
 
     def load(self) -> Inventory:
-        """Build an Inventory from the JSON file. Seeds defaults if missing/empty."""
         inventory = Inventory()
 
         if not os.path.exists(self.__file_path) or os.path.getsize(self.__file_path) == 0:
@@ -42,20 +43,46 @@ class InventoryFileHandler:
 
         for record in records:
             try:
-                inventory.add_product(Product(
-                    record["product_id"], record["name"], record["price"], record["stock"]
-                ))
+                inventory.add_product(self.__create_product(record))
             except (KeyError, ValueError, TypeError) as error:
                 print(f"Skipping invalid record {record}: {error}")
         return inventory
 
     def save(self, inventory: Inventory) -> None:
-        records = [
-            {"product_id": p.product_id, "name": p.name, "price": p.price, "stock": p.stock}
-            for p in inventory.get_products()
-        ]
+        records = [self.__to_record(p) for p in inventory.get_products()]
         self.__write(records)
         print(f"Inventory successfully saved to {self.__file_path}")
+
+    # ---------- Private helpers ----------
+    @staticmethod
+    def __create_product(record: dict):
+        """Use the saved type identifier to rebuild the correct subclass."""
+        common = (record["product_id"], record["name"], record["price"], record["stock"])
+        product_type = record.get("type")
+
+        if product_type == "physical":
+            return PhysicalProduct(*common, record["weight"])
+        if product_type == "digital":
+            return DigitalProduct(*common, record["download_size"])
+        raise ValueError(f"Unknown product type '{product_type}'")
+
+    @staticmethod
+    def __to_record(product) -> dict:
+        record = {
+            "product_id": product.product_id,
+            "name": product.name,
+            "price": product.price,
+            "stock": product.stock,
+        }
+        if isinstance(product, PhysicalProduct):
+            record["type"] = "physical"
+            record["weight"] = product.weight
+        elif isinstance(product, DigitalProduct):
+            record["type"] = "digital"
+            record["download_size"] = product.download_size
+        else:
+            raise TypeError(f"Don't know how to save {type(product).__name__}")
+        return record
 
     def __write(self, records: list) -> None:
         folder = os.path.dirname(self.__file_path)

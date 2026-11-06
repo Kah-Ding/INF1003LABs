@@ -1,0 +1,34 @@
+classDiagram
+    class Product {
+        -__product_id : str
+        -__name : str
+        -__price : float
+        -__stock : int
+        +MAX_STOCK : int = 500
+        +product_id() str
+        +name() str
+        +price() float
+        +stock() int
+        +update_stock(quantity : int) void
+        +calculate_tax(quantity : int, rate : float) float
+        +display_information() void
+    }
+    class Inventory {
+        -__products : list~Product~
+        +add_product(product : Product) void
+        +find_by_id(product_id : str) Product
+        +search_product(keyword : str) list~Product~
+        +display_all() void
+        +get_products() list~Product~
+        +generate_next_id() str
+        +total_units() int
+    }
+    class InventoryFileHandler {
+        -__file_path : str
+        +load() Inventory
+        +save(inventory : Inventory) void
+        -__write(records : list) void
+    }
+    Inventory "1" o-- "0..*" Product : contains
+    InventoryFileHandler ..> Inventory : loads/saves
+    InventoryFileHandler ..> Product : creates

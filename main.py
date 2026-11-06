@@ -1,17 +1,19 @@
 """
 main.py
-Main program: displays the menu, gets user input, and calls Inventory/Product methods.
-It never touches a Product's private data directly.
+Main program: menu, user input, and calls to Inventory / Product methods.
 """
 
 import os
 
 from product import Product
+from physical_product import PhysicalProduct
+from digital_product import DigitalProduct
+from can_be_shipped import CanBeShipped
 from file_handler import InventoryFileHandler
 
 INVENTORY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "inventory.json")
 
-failed_attempts = 0  # tracked like `failed` in persistent_auditor.py
+failed_attempts = 0
 
 
 # ---------- Input helpers ----------
@@ -30,7 +32,7 @@ def get_int(prompt: str, allow_negative: bool = False) -> int:
         failed_attempts += 1
 
 
-def get_price(prompt: str) -> float:
+def get_float(prompt: str, allow_zero: bool = True) -> float:
     global failed_attempts
     while True:
         raw = input(prompt).strip()
@@ -38,6 +40,8 @@ def get_price(prompt: str) -> float:
             value = float(raw)
             if value < 0:
                 print("Negative values are not allowed.")
+            elif value == 0 and not allow_zero:
+                print("Value must be greater than 0.")
             else:
                 return value
         except ValueError:
@@ -55,27 +59,48 @@ def get_text(prompt: str) -> str:
         failed_attempts += 1
 
 
+def get_choice(prompt: str, options: tuple) -> str:
+    global failed_attempts
+    while True:
+        choice = input(prompt).strip()
+        if choice in options:
+            return choice
+        print(f"Invalid choice. Please enter one of: {', '.join(options)}.")
+        failed_attempts += 1
+
+
 # ---------- Menu actions ----------
 def add_product(inventory) -> bool:
     global failed_attempts
+    print("Product type:\n  1. Physical product\n  2. Digital product")
+    product_type = get_choice("Choose type (1-2): ", ("1", "2"))
+
     product_id = inventory.generate_next_id()
     name = get_text("Enter product name: ")
-
     for existing in inventory.get_products():
         if existing.name.lower() == name.lower():
             print(f"'{existing.name}' already exists as {existing.product_id}. "
                   f"Use option 3 to update its stock.")
             return False
 
-    price = get_price("Enter price: ")
+    price = get_float("Enter price: ")
     stock = get_int(f"Enter starting stock (0-{Product.MAX_STOCK}): ")
+
     try:
-        inventory.add_product(Product(product_id, name, price, stock))
+        if product_type == "1":
+            weight = get_float("Enter weight (kg): ", allow_zero=False)
+            product = PhysicalProduct(product_id, name, price, stock, weight)
+        else:
+            size = get_float("Enter download size (MB): ", allow_zero=False)
+            product = DigitalProduct(product_id, name, price, stock, size)
+        inventory.add_product(product)
     except ValueError as error:
         print(error)
         failed_attempts += 1
         return False
-    print(f"\nNew Product Added: {product_id}, {name}, ${price:.2f}, {stock}")
+
+    print("\nNew Product Added:")
+    product.display_information()
     return True
 
 
@@ -91,7 +116,7 @@ def update_stock(inventory) -> bool:
     quantity = get_int("Enter quantity to add (use a negative number to remove): ",
                        allow_negative=True)
     try:
-        product.update_stock(quantity)  # Product validates its own state
+        product.update_stock(quantity)
     except ValueError as error:
         print(error)
         failed_attempts += 1
@@ -112,6 +137,10 @@ def search_product(inventory) -> None:
     print("-" * 46)
     for product in results:
         product.display_information()
+        print(f"{'':<8}Fulfilment: {product.get_fulfilment_info()}")
+        # Check the CAPABILITY (interface), not the specific class
+        if isinstance(product, CanBeShipped):
+            print(f"{'':<8}Shipping cost: ${product.calculate_shipping_cost():.2f}")
 
 
 def generate_report(inventory) -> None:
@@ -123,6 +152,7 @@ def generate_report(inventory) -> None:
 
 # ---------- Main loop ----------
 def main():
+    global failed_attempts
     file_handler = InventoryFileHandler(INVENTORY_FILE)
     inventory = file_handler.load()
     unsaved_changes = False
@@ -158,7 +188,6 @@ def main():
             break
         else:
             print("Invalid choice. Please enter a number from 1 to 6.")
-            global failed_attempts
             failed_attempts += 1
 
 
