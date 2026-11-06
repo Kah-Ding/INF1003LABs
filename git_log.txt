@@ -1,3 +1,27 @@
+commit bd04f864656969dcc74e903390a5b40d62449323
+Author: punkKD <pungkahding@gmail.com>
+Date:   Fri Nov 6 23:10:53 2026 +0800
+
+    Reindex: Screenshots
+
+commit 65ed2f8bb1867e86c59a353d485aa5c58346b88f
+Author: punkKD <pungkahding@gmail.com>
+Date:   Fri Nov 6 23:10:35 2026 +0800
+
+    Update: Dockerfile
+
+commit 1e9951a04ec8f083444aa28c9ef6b57b17d666a6
+Author: punkKD <pungkahding@gmail.com>
+Date:   Fri Nov 6 23:08:34 2026 +0800
+
+    Update: Lab8
+
+commit d561292b88c058d7c73ac1b01f1c58f9e3d0ff3a
+Author: punkKD <pungkahding@gmail.com>
+Date:   Tue Nov 3 11:23:24 2026 +0800
+
+    Update: git logs
+
 commit 493b52b3af948c6478564bd5a3cc903e73c3a7a4
 Author: punkKD <pungkahding@gmail.com>
 Date:   Tue Nov 3 11:23:05 2026 +0800
