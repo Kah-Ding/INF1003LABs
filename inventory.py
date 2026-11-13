@@ -1,48 +1,60 @@
 """
 inventory.py
-SRP: manages a COLLECTION of Product objects.
-Unchanged in logic from Lab 6 - it works with any Product subclass (OCP in action).
+Inventory o-- Product is AGGREGATION:
+the Inventory holds references to Products but does not create them or control
+their lifecycle. Removing a Product only removes the reference.
 """
+
+from __future__ import annotations
 
 from product import Product
 
 
 class Inventory:
-    def __init__(self):
-        self.__products = []
+    def __init__(self) -> None:
+        self.__products: list[Product] = []   # typed with the BASE class
+
+    @property
+    def products(self) -> list[Product]:
+        """A copy, so outside code can loop over products but not edit the list."""
+        return list(self.__products)
 
     def add_product(self, product: Product) -> None:
         if not isinstance(product, Product):
             raise TypeError("Only Product objects can be added to the inventory.")
-        if self.find_by_id(product.product_id) is not None:
-            raise ValueError(f"Product ID {product.product_id} already exists.")
+        if self.find_product(product.product_id) is not None:
+            raise ValueError(f"Product ID {product.product_id} already exists in this inventory.")
         self.__products.append(product)
 
-    def find_by_id(self, product_id: str):
+    def remove_product(self, product_id: str) -> Product | None:
+        """Remove the reference and hand the (still existing) Product back to the caller."""
+        product = self.find_product(product_id)
+        if product is not None:
+            self.__products.remove(product)
+        return product
+
+    def find_product(self, product_id: str) -> Product | None:
         product_id = product_id.strip().upper()
         for product in self.__products:
             if product.product_id == product_id:
                 return product
         return None
 
-    def search_product(self, keyword: str) -> list:
+    def search_product(self, keyword: str) -> list[Product]:
         keyword = keyword.strip().lower()
         return [
             p for p in self.__products
             if keyword in p.product_id.lower() or keyword in p.name.lower()
         ]
 
-    def display_all(self) -> None:
+    def display_all_products(self) -> None:
         if not self.__products:
             print("Inventory is empty.")
             return
         print(f"{'ID':<8}{'Name':<20}{'Price':>10}{'Stock':>8}")
-        print("-" * 46)
+        print("-" * 70)
         for product in self.__products:
-            product.display_information()   # each subclass displays itself
-
-    def get_products(self) -> list:
-        return list(self.__products)
+            product.display_information()   # polymorphism: each object picks its own version
 
     def generate_next_id(self) -> str:
         highest = 0
@@ -55,5 +67,5 @@ class Inventory:
     def total_units(self) -> int:
         return sum(p.stock for p in self.__products)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.__products)
