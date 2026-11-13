@@ -1,17 +1,23 @@
 """
 digital_product.py
-A DigitalProduct IS-A Product. It does NOT implement CanBeShipped.
+DigitalProduct IS-A Product. It does NOT implement CanBeShipped.
+For LSP it keeps Product's update_stock() unchanged: stock here means
+available licences/keys, so updating it has the same meaning as for Product.
 """
 
+from __future__ import annotations
+
 from product import Product
+from supplier import Supplier
 
 
 class DigitalProduct(Product):
-    def __init__(self, product_id: str, name: str, price: float, stock: int, download_size: float):
-        super().__init__(product_id, name, price, stock)
+    def __init__(self, product_id: str, name: str, price: float, stock_quantity: int,
+                 supplier: Supplier, download_size: float) -> None:
+        super().__init__(product_id, name, price, stock_quantity, supplier)
         if float(download_size) <= 0:
             raise ValueError("Download size must be greater than 0 MB.")
-        self.__download_size = float(download_size)
+        self.__download_size: float = float(download_size)
 
     @property
     def download_size(self) -> float:

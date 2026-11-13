@@ -1,30 +1,37 @@
 """
 product.py
 Abstract base class for every product.
-SRP: represent and manage the data/behaviour COMMON to all products.
-OCP: new product types extend this class instead of modifying it.
+- Product --> Supplier : association (Product keeps a reference, does not own it)
 """
+
+from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
+from supplier import Supplier
+
 
 class Product(ABC):
-    MAX_STOCK = 500
+    MAX_STOCK: int = 500
 
-    def __init__(self, product_id: str, name: str, price: float, stock: int):
+    def __init__(self, product_id: str, name: str, price: float,
+                 stock_quantity: int, supplier: Supplier) -> None:
         if not str(product_id).strip():
             raise ValueError("Product ID cannot be empty.")
         if not str(name).strip():
             raise ValueError("Product name cannot be empty.")
         if float(price) < 0:
             raise ValueError("Price cannot be negative.")
-        if int(stock) < 0 or int(stock) > Product.MAX_STOCK:
+        if int(stock_quantity) < 0 or int(stock_quantity) > Product.MAX_STOCK:
             raise ValueError(f"Stock must be between 0 and {Product.MAX_STOCK}.")
+        if not isinstance(supplier, Supplier):
+            raise TypeError("supplier must be a Supplier object.")
 
-        self.__product_id = str(product_id).strip().upper()
-        self.__name = str(name).strip()
-        self.__price = float(price)
-        self.__stock = int(stock)
+        self.__product_id: str = str(product_id).strip().upper()
+        self.__name: str = str(name).strip()
+        self.__price: float = float(price)
+        self.__stock: int = int(stock_quantity)
+        self.__supplier: Supplier = supplier   # association: a reference, not ownership
 
     # ---------- Read-only access ----------
     @property
@@ -43,8 +50,17 @@ class Product(ABC):
     def stock(self) -> int:
         return self.__stock
 
+    @property
+    def supplier(self) -> Supplier:
+        return self.__supplier
+
     # ---------- Concrete (shared) behaviour ----------
     def update_stock(self, quantity: int) -> None:
+        """
+        Contract every subclass must keep (LSP):
+        add `quantity` to stock (negative removes); raise ValueError if the
+        result would be below 0 or above MAX_STOCK; return nothing.
+        """
         new_stock = self.__stock + int(quantity)
         if new_stock < 0:
             raise ValueError(
@@ -62,9 +78,10 @@ class Product(ABC):
 
     def display_information(self) -> None:
         """Common information. Subclasses call this via super() and add their own."""
-        print(f"{self.__product_id:<8}{self.__name:<20}${self.__price:>9.2f}{self.__stock:>8}")
+        print(f"{self.__product_id:<8}{self.__name:<20}${self.__price:>9.2f}{self.__stock:>8}"
+              f"   Supplier: {self.__supplier.name}")
 
-    # ---------- Abstract behaviour (subclasses MUST implement) ----------
+    # ---------- Abstract behaviour ----------
     @abstractmethod
     def get_fulfilment_info(self) -> str:
         """Describe how this product is delivered to the customer."""
